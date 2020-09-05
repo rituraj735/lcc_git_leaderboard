@@ -1,5 +1,9 @@
 {% extends "layout.html" %}
 
+{% block login %}
+    <link rel="stylesheet" href=" {{ url_for('static', filename='main.css') }} ">
+{% endblock login %}
+
 {% block content %}
 <div class="container">
    <div class="form">
