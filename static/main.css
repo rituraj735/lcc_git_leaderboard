@@ -35,6 +35,26 @@ a:hover {
   box-shadow: 0 4px 10px 4px rgba(19, 35, 47, 0.3);
 }
 
+.footer_container{
+  background-color:#343a40c5;
+  color:white;
+  
+  padding: 10px;
+}
+
+.tech_support{
+  float: right;
+}
+.footer-copyright{
+  overflow: hidden;
+  background-color: #343a40;
+  color: white;
+}
+.header_text{
+  font-family: 'Dosis', sans-serif;
+  font-size: 30px;
+}
+
 table{
   border-collapse: collapse;
   border: 2px solid white;
