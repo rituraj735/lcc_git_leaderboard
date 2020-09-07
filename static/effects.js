@@ -30,7 +30,7 @@ $('.form').find('input, textarea').on('keyup blur focus', function (e) {
 $('#participants').DataTable({
   "bFilter": false,
   "bLengthChange": false,
-  "pageLength": 3
+  "pageLength": 4
 });
 
 

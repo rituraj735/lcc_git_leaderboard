@@ -9,6 +9,8 @@ html {
 body {
   background: #eeeae7;
   font-family: 'Titillium Web', sans-serif;
+  margin-left: 20px;
+  margin-right: 20px;
 }
 
 .alert{
@@ -38,6 +40,7 @@ a:hover {
 table{
   border-collapse: collapse;
   border: 2px solid white;
+  
 }
 
 .tab-group {

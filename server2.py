@@ -12,12 +12,12 @@ headers = {'Authorization': f'token {token}'}
 # Indian_tz = pytz.timezone('Asia/Kolkata')
 present_time = datetime.datetime(2020, 9, 5, 0, 0, 0)
 ist = datetime.timedelta(hours=5.5)
-fork_user = 'rituraj735'
+fork_user = 'karan-bamboozled'
 fork_repo = 'test'
 fork_file = 'contestants.txt'
 
-clone_user = 'rituraj735'
-clone_repo = 'another_test'
+clone_user = 'karan-bamboozled'
+clone_repo = 'karan_clone'
 
 
 app = Flask(__name__)
@@ -36,13 +36,14 @@ db = psycopg2.connect(user=USERNAME, password=PASSWORD,
 @app.route('/')
 def leaderboard():
     current_user = session.get('user')
-    
+
     if current_user is None:
         return redirect(url_for('login'))
 
     checkpoint = 0
     users = []
     teams = []
+    current_user_dict = {}
 
     get_users = 'SELECT * from users ORDER BY score DESC'
     get_teams = 'SELECT team,COUNT(display_name) as members,SUM(score) as score from users GROUP BY team ORDER BY score DESC'
@@ -58,17 +59,20 @@ def leaderboard():
         rank = 0
         previous_score = -1
         for user in users_data:
-            if user[1] == current_user:
-                checkpoint = user[5]
-                current_team= user[3]
+
             if previous_score != user[4]:
                 rank = rank+1
                 previous_score = user[4]
+
+            if user[1] == current_user:
+                checkpoint = user[5]
+                current_team = user[3]
+                current_user_dict = {
+                    'rank': rank, 'display_name': user[0], 'github_name': user[1], 'team': user[3], 'score': user[4]}
+
             users.append(
                 {'rank': rank, 'display_name': user[0], 'github_name': user[1], 'team': user[3], 'score': user[4]})
 
-        current_user = session.get('user')
-        
     try:
         cursor = db.cursor()
         cursor.execute(get_teams)
@@ -100,16 +104,16 @@ def leaderboard():
     else:
         if checkpoint_data is not None:
             checkpoint = {'number': checkpoint_data[0], 'title': checkpoint_data[1],
-                          'description': checkpoint_data[2], 'link': url_for(checkpoint_data[3]),'points':checkpoint_data[4]}
+                          'description': checkpoint_data[2], 'link': url_for(checkpoint_data[3]), 'points': checkpoint_data[4]}
         else:
             checkpoint = {'number': -1, 'title': 'Finished',
-                          'description': 'You have reached the end', 'link': '','points':0}
+                          'description': 'You have reached the end', 'link': '', 'points': 0}
         # print("Checkpoint = ", checkpoint)
 
-    return render_template('leaderboard.html', users=users, checkpoint=checkpoint, current_user=current_user, teams=teams, current_team= current_team)
+    return render_template('leaderboard.html', users=users, checkpoint=checkpoint, current_user=current_user, teams=teams, current_team=current_team, current_user_dict=current_user_dict)
 
 
-@app.route('/check-repo/', methods=['POST'])
+@ app.route('/check-repo/', methods=['POST'])
 def check_repo():
     user = session.get('user')
 
@@ -162,7 +166,7 @@ def check_repo():
     return redirect(url_for('leaderboard'))
 
 
-@app.route('/check-commit-web/', methods=['POST'])
+@ app.route('/check-commit-web/', methods=['POST'])
 def check_commit_web():
     user = session.get('user')
     repo = session.get('repo')
@@ -207,7 +211,7 @@ def check_commit_web():
     return redirect(url_for('leaderboard'))
 
 
-@app.route('/quiz-question-1', methods=['POST'])
+@ app.route('/quiz-question-1', methods=['POST'])
 def check_quiz_1():
     user = session.get('user')
     repo = session.get('repo')
@@ -1304,4 +1308,4 @@ def login():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=3000)
+    app.run(debug=True, host='0.0.0.0', port=5000)
